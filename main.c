@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
+#include <unistd.h>
 
 #define QUANTIDADE_USUARIO 5
 
@@ -54,6 +55,7 @@ bool efeituarLogin(char usuarios[][100], char senhas[][100], char usuarioInforma
 }
 
 
+
 int main() {
 
   bool cadastroEfeituado = false;
@@ -70,6 +72,26 @@ int main() {
   char usuarioInformadoLogin[100];
   char senhaInformadaLogin[100];
 
+  int opcaoSelecionadaMenuPrincipal;
+
+  int categoriaSelecionadaCadastrarDespesas;
+  int categoriaDaDespesaMenuCadastrarDespesas;
+  float quantidadeMenuCadastrarDespesas;
+  float valorDespesaMenuCadastrarDespesas;
+  char descricaoDespesaMenuCadastrarDespesas[100];
+  char fornecedorMenuCadastrarDespesas[100];
+
+  int categoriaSelecionadaCadastrarReceitas;
+  int categoriaDaReceitaMenuCadastrarReceitas;
+  float valorReceitaMenuCadastrarReceitas;
+  float quantidadeMenuCadastrarReceitas;
+  char descricaoReceitaMenuCadastrarReceitas[100];
+
+  
+  int oqueFazerAposIsso;
+
+
+
   int cadastrarMaisUmUsuario = 0;
 
   char usuarios[5][100];
@@ -79,7 +101,9 @@ int main() {
 
   do{
 
-    do{
+    while(!cadastroEfeituado){
+
+      printf("Menu de cadastro\n");
 
       posicaoUsuario = cadastrarUsuario(usuarios, senhas, posicaoUsuario);
 
@@ -94,9 +118,11 @@ int main() {
         cadastroEfeituado = false;
       }
 
-    } while(!cadastroEfeituado);
+    } 
 
-    do {
+    while(!usuarioLogado) {
+
+      printf("Menu de login\n");
 
       printf("Usuário: ");
       fgets(usuarioInformadoLogin, sizeof(usuarioInformadoLogin), stdin);
@@ -110,20 +136,156 @@ int main() {
 
       if(usuarioLogado){
         printf("Login efeituado\n");
+        usuarioLogado = true;
       } else if(!usuarioLogado){
         printf("Credenciais inválidas, tente novamente!\n");
       }
 
 
-    } while (!usuarioLogado);
+    }
+
+
+    do {
+
+      printf("Bem vindo ao gerênciador de despesas e receitas\n");
+      printf("Selecione o que deseja fazer agora\n");
+      printf("1 - Saldo atual;\n");
+      printf("2 - Historico de compras;\n");
+      printf("3 - Nova despeza;\n");
+      printf("4 - Adicionar receita;\n");
+      printf("5 - Lucros e despesas;\n");
+      printf("6 - Comparativos;\n");
+      printf("7 - Fornecedor;\n");
+      printf("8 - Produtos e serviços;\n");
+      printf("9 - Listar cadegorias;\n");
+      printf("10 - Dados cadastrais;\n");
+      printf("0 - Sair\n");
+      scanf("%d", &opcaoSelecionadaMenuPrincipal);
+      getchar();
+
+      switch(opcaoSelecionadaMenuPrincipal) {
+
+        case 0:
+        printf("Finalizando programa\n");
+        continuarMenuPrincipal = false;
+        break;
+        case 1:
+        printf("Consultado saldo...\n");
+        sleep(1);
+
+        break;
+        case 2:
+        printf("Buscando suas informações...\n");
+        sleep(1);
+        break;
+        case 3: 
+
+        do {
+          printf("Cadastrar nova despesa\n");
+          printf("Selecione a categoria: \n");
+          printf("1- Produto de uso interno;\n");
+          printf("2 - Serviço;\n");
+          printf("3 - Funcionario;\n");
+          printf("4 - Para revenda;\n");
+          printf("5 - Manutenção do Local;\n");
+          printf("6 - Produto;\n");
+          printf("7 - Indedefinida;\n");
+          printf("0 - Voltar ao menu principal\n");
+          // aqui da pra criar uma funcao que gerencia as categorias disponiveis
+          // na verdade já vai ter que fazer isso para uma outra opção
+          scanf("%d", &categoriaSelecionadaCadastrarDespesas);
+          getchar();
+
+          printf("Valor da despesa: ");
+          scanf("%f", &valorDespesaMenuCadastrarDespesas);
+          getchar();
+
+          //Mudei essa parte em relação ao fluxograma, pois acho mais eficiente pedir a descrição da despesa que pedir um produto ou serviço, ja que pode haver opções onde nunhuma das duas se enquadra: obs.
+          printf("Descrição: ");
+          fgets(descricaoDespesaMenuCadastrarDespesas, sizeof(descricaoDespesaMenuCadastrarDespesas), stdin);
+          descricaoDespesaMenuCadastrarDespesas[strcspn(descricaoDespesaMenuCadastrarDespesas, "\n")] = '\0';
+
+          printf("Fornecedor: ");
+          fgets(fornecedorMenuCadastrarDespesas, sizeof(fornecedorMenuCadastrarDespesas), stdin);
+          fornecedorMenuCadastrarDespesas[strcspn(fornecedorMenuCadastrarDespesas, "\n")] = '\0';
+
+          printf("Quantidade: ");
+          scanf("%f", &quantidadeMenuCadastrarDespesas);
+          getchar();
+
+          printf("Cadastrando despesa...\n");
+          printf("Despesa cadastrada\n");
+          printf("O que deseja fazer agora? [0 - Voltar ao menu principal | 1 - cadastrar uma nova despesa]\n");
+          scanf("%d", &oqueFazerAposIsso);
+          getchar();
+
+          // chamar funcao que vai cadastrar a despesa
+
+          if(oqueFazerAposIsso == 0){
+
+            continuarMenuDespesa = false;
+
+          } else if(oqueFazerAposIsso == 1){
+
+            continuarMenuDespesa = true;
+
+          } else {
+            printf("Opção invalida! Voltando ao menu principal ...\n");
+            continuarMenuDespesa = false;
+          }
+      } while (continuarMenuDespesa);
+        break;
+
+        case 4:
+
+        do {
+          printf("Cadastrar uma nova receita\n");
+          printf("Valor da receita: ");
+          scanf("%f", &valorReceitaMenuCadastrarReceitas);
+          getchar();
+          printf("Quantidade: ");
+          scanf("%f", &quantidadeMenuCadastrarReceitas);
+          getchar();
+          printf("Produto ou serviço: ");
+          fgets(descricaoReceitaMenuCadastrarReceitas, sizeof(descricaoDespesaMenuCadastrarDespesas), stdin);
+          descricaoReceitaMenuCadastrarReceitas[strcspn(descricaoReceitaMenuCadastrarReceitas, "\n")] = '\0';
+
+          printf("Selecione uma categoria: \n");
+          //chamar funcao que vai listar as categorias disponiveis
+          scanf("%d", &categoriaDaReceitaMenuCadastrarReceitas);
+          getchar();
+
+          printf("Registrando receita ...\n");
+
+          //chamar funcao que vai cadastrar a receita 
+
+          printf("Receita cadastrada!\n");
+          printf("O que deseja fazer agora? [0 - Voltar ao menu principal | 1 - cadastrar uma nova despesa]\n");
+            scanf("%d", &oqueFazerAposIsso);
+            getchar();
+        } while (continuarMenuReceitas);
+
+      
+        break;
+        case 5:
+        break;
+        case 6:
+        break;
+        case 7:
+        break;
+        case 8:
+        break;
+        case 9:
+        break;
+        case 10:
+        break;
+        
+        
+
+      }
+
+    } while (continuarMenuPrincipal);
 
   } while (continuarPrograma);
 
-
-
-
-
-
-
-  
 }
