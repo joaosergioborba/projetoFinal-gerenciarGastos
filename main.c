@@ -54,10 +54,23 @@ bool efeituarLogin(char usuarios[][100], char senhas[][100], char usuarioInforma
 
 }
 
+char gerenciadorCategorias(char categoriasCadastradas[][40]){
 
+  for(int i = 0; i<7; i++){
+    printf("%d - %s\n", i+1, categoriasCadastradas[i]);
+  }
+ 
+}
 
 int main() {
 
+  //Banco de dados
+  char categorias[8][40] = {"Produto de uso interno", "Serviço", "Funcionario", "Para revenda", "Manutenção do local", "Produto", "Indefinida"};
+  char usuarios[5][100];
+  char senhas[5][100];
+  int posicaoUsuario = 0;
+
+  //Variaveis estados do sistema
   bool cadastroEfeituado = false;
   bool usuarioLogado = false;
   bool continuarMenuPrincipal = true;
@@ -69,11 +82,20 @@ int main() {
   bool continuarMenuProdutosServicos = true;
   bool continuarPrograma = true;
 
+  //Variaveis fluxo do sistema
+  int oqueFazerAposIsso;
+  int cadastrarMaisUmUsuario = 0;
+
+
+  
+  // Variaveis menu login
   char usuarioInformadoLogin[100];
   char senhaInformadaLogin[100];
 
+  //Variaveis menu Principal
   int opcaoSelecionadaMenuPrincipal;
 
+  //Variaveis menu Cadastrar despesas
   int categoriaSelecionadaCadastrarDespesas;
   int categoriaDaDespesaMenuCadastrarDespesas;
   float quantidadeMenuCadastrarDespesas;
@@ -81,22 +103,27 @@ int main() {
   char descricaoDespesaMenuCadastrarDespesas[100];
   char fornecedorMenuCadastrarDespesas[100];
 
+
+  //Variaveis menu cadastrar receitas
   int categoriaSelecionadaCadastrarReceitas;
   int categoriaDaReceitaMenuCadastrarReceitas;
   float valorReceitaMenuCadastrarReceitas;
   float quantidadeMenuCadastrarReceitas;
   char descricaoReceitaMenuCadastrarReceitas[100];
 
+  //Variaveis menu Comparativo
+  char produtoOuServicoMenuComparativo[100];
+
+
+  //Variaveis menu fornecedor
+  //Variaveis menu produtos e serviços
+  //Variaveis menu listar categorias
+  //Variaveis menu dados cadastrais
+  //Variaveis menu sair
   
-  int oqueFazerAposIsso;
+ 
 
-
-
-  int cadastrarMaisUmUsuario = 0;
-
-  char usuarios[5][100];
-  char senhas[5][100];
-  int posicaoUsuario = 0;
+  
 
 
   do{
@@ -183,16 +210,16 @@ int main() {
         do {
           printf("Cadastrar nova despesa\n");
           printf("Selecione a categoria: \n");
-          printf("1- Produto de uso interno;\n");
-          printf("2 - Serviço;\n");
-          printf("3 - Funcionario;\n");
-          printf("4 - Para revenda;\n");
-          printf("5 - Manutenção do Local;\n");
-          printf("6 - Produto;\n");
-          printf("7 - Indedefinida;\n");
-          printf("0 - Voltar ao menu principal\n");
+          //printf("1- Produto de uso interno;\n");
+          //printf("2 - Serviço;\n");
+          //printf("3 - Funcionario;\n");
+          //printf("4 - Para revenda;\n");
+          //printf("5 - Manutenção do Local;\n");
+          //printf("6 - Produto;\n");
+          //printf("7 - Indedefinida;\n");
+          //printf("0 - Voltar ao menu principal\n");
           // aqui da pra criar uma funcao que gerencia as categorias disponiveis
-          // na verdade já vai ter que fazer isso para uma outra opção
+          gerenciadorCategorias(categorias);
           scanf("%d", &categoriaSelecionadaCadastrarDespesas);
           getchar();
 
@@ -251,6 +278,7 @@ int main() {
           descricaoReceitaMenuCadastrarReceitas[strcspn(descricaoReceitaMenuCadastrarReceitas, "\n")] = '\0';
 
           printf("Selecione uma categoria: \n");
+          gerenciadorCategorias(categorias);
           //chamar funcao que vai listar as categorias disponiveis
           scanf("%d", &categoriaDaReceitaMenuCadastrarReceitas);
           getchar();
@@ -261,21 +289,43 @@ int main() {
 
           printf("Receita cadastrada!\n");
           printf("O que deseja fazer agora? [0 - Voltar ao menu principal | 1 - cadastrar uma nova despesa]\n");
-            scanf("%d", &oqueFazerAposIsso);
-            getchar();
+          scanf("%d", &oqueFazerAposIsso);
+          getchar();
+
+          if(oqueFazerAposIsso == 0){
+
+            continuarMenuDespesa = false;
+
+          } else if(oqueFazerAposIsso == 1){
+
+            continuarMenuDespesa = true;
+
+          } else {
+            printf("Opção invalida! Voltando ao menu principal ...\n");
+            continuarMenuDespesa = false;
+          }
+
         } while (continuarMenuReceitas);
 
       
         break;
         case 5:
+        printf("Consultando dados ...\n");
+        //chamar funcao que vai calcular a receita, as despesas, o lucro.
         break;
         case 6:
+        printf("Menu de comparação de preços\n");
+        printf("Qual produto/ serviço deseja comparar agora?\n");
+        fgets(produtoOuServicoMenuComparativo, sizeof(produtoOuServicoMenuComparativo), stdin);
+        produtoOuServicoMenuComparativo[strcspn(produtoOuServicoMenuComparativo, "\n")] = '\0';
+
         break;
         case 7:
         break;
         case 8:
         break;
         case 9:
+        gerenciadorCategorias(categorias);
         break;
         case 10:
         break;
