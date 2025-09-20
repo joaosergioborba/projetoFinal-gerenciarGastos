@@ -62,13 +62,13 @@ char gerenciadorCategorias(char categoriasCadastradas[][40]){
  
 }
 
-char oqueFazerAposIsso(bool menuAtual, bool condicaoGeralPrograma) {
+int oqueFazerAposExecucao() {
   int opcaoSelecionada;
   printf("O que deseja fazer agora? [0 - Voltar ao menu principal | 1 - Recarregar menu atual | 2 - Finalizar programa]\n");
           scanf("%d", &opcaoSelecionada);
           getchar();
 
-          if(opcaoSelecionada == 0){
+          /*if(opcaoSelecionada == 0){
 
             menuAtual = false;
 
@@ -84,8 +84,9 @@ char oqueFazerAposIsso(bool menuAtual, bool condicaoGeralPrograma) {
             printf("Opção invalida! Voltando ao menu principal ...\n");
             oqueFazerAposIsso(menuAtual, condicaoGeralPrograma);
             menuAtual = false;
-          }
-      return {menuAtual, condicaoGeralPrograma};
+          }*/ // só funcionaria com ponteiro, infelizmente:(
+
+      return opcaoSelecionada;
 }
 
 int main() {
@@ -225,6 +226,7 @@ int main() {
         case 0:
         printf("Finalizando programa\n");
         continuarMenuPrincipal = false;
+        continuarPrograma = false;
         break;
         case 1:
         printf("Consultado saldo...\n");
@@ -234,9 +236,12 @@ int main() {
 
         break;
         case 2:
-        printf("Buscando suas informações...\n");
-        sleep(1);
-        // chamar funcao que lista as transaçõoes
+        do {
+
+          printf("Buscando suas informações...\n");
+          sleep(1);
+          // chamar funcao que lista as transaçõoes
+        } while (continuarMenuHistorico);
 
         break;
         case 3: 
@@ -280,8 +285,10 @@ int main() {
 
           /*printf("O que deseja fazer agora? [0 - Voltar ao menu principal | 1 - cadastrar uma nova despesa]\n");
           scanf("%d", &oqueFazerAposIsso);
-          getchar();
+          getchar(); */ //funcao oqueFazerAposExecucao vai pegar isso
+        
 
+          int oqueFazerAposIsso = oqueFazerAposExecucao();
           if(oqueFazerAposIsso == 0){
 
             continuarMenuDespesa = false;
@@ -290,12 +297,17 @@ int main() {
 
             continuarMenuDespesa = true;
 
-          } else {
+          } else if (oqueFazerAposIsso == 2) {
+              continuarMenuReceitas = false;
+              continuarMenuPrincipal = false;
+              continuarPrograma=false;
+
+          }else {
             printf("Opção invalida! Voltando ao menu principal ...\n");
             continuarMenuDespesa = false;
-          }*/
+          }
         
-         oqueFazerAposIsso(continuarMenuDespesa, continuarPrograma);
+         
 
       } while (continuarMenuDespesa);
         break;
@@ -325,10 +337,7 @@ int main() {
           //chamar funcao que vai cadastrar a receita 
           printf("Receita cadastrada!\n");
 
-          printf("O que deseja fazer agora? [0 - Voltar ao menu principal | 1 - cadastrar uma nova despesa]\n");
-          scanf("%d", &oqueFazerAposIsso);
-          getchar();
-
+          int oqueFazerAposIsso = oqueFazerAposExecucao();
           if(oqueFazerAposIsso == 0){
 
             continuarMenuReceitas = false;
@@ -336,6 +345,11 @@ int main() {
           } else if(oqueFazerAposIsso == 1){
 
             continuarMenuReceitas = true;
+
+          } else if (oqueFazerAposIsso == 2) {
+              continuarMenuReceitas = false;
+              continuarMenuPrincipal = false;
+              continuarPrograma=false;
 
           } else {
             printf("Opção invalida! Voltando ao menu principal ...\n");
@@ -361,9 +375,7 @@ int main() {
           printf("Buscando dados...\b");
           //chamar função que vai comparar 
 
-          printf("O que deseja fazer agora? [0 - Voltar ao menu principal | 1 - cadastrar uma nova despesa]\n");
-          scanf("%d", &oqueFazerAposIsso);
-          getchar();
+          int oqueFazerAposIsso = oqueFazerAposExecucao();
 
           if(oqueFazerAposIsso == 0){
 
@@ -372,6 +384,11 @@ int main() {
           } else if(oqueFazerAposIsso == 1){
 
             continuarMenuComparativo = true;
+
+          } else if (oqueFazerAposIsso == 2) {
+              continuarMenuReceitas = false;
+              continuarMenuPrincipal = false;
+              continuarPrograma=false;
 
           } else {
             printf("Opção invalida! Voltando ao menu principal ...\n");
@@ -393,10 +410,8 @@ int main() {
           scanf("%d", &opcaoSelecionadaMenuFornecedores);
           getchar();
           //chamar funcao com que vai lidar com isso, aqui da pra fazer um swith direto dentro da funcao, pq ai a propria funcao vai lidar com oq fazer em cada uma das opções selecionadas e retornar o que precisa. (podem fazer de outra forma também)
-          printf("O que deseja fazer agora? [0 - Voltar ao menu principal | 1 - cadastrar uma nova despesa]\n");
-          scanf("%d", &oqueFazerAposIsso);
-          getchar();
-
+          
+          int oqueFazerAposIsso = oqueFazerAposExecucao();
           if(oqueFazerAposIsso == 0){
 
             continuarMenuFornecedor = false;
@@ -404,6 +419,11 @@ int main() {
           } else if(oqueFazerAposIsso == 1){
 
             continuarMenuFornecedor = true;
+
+          } else if (oqueFazerAposIsso == 2) {
+              continuarMenuReceitas = false;
+              continuarMenuPrincipal = false;
+              continuarPrograma=false;
 
           } else {
             printf("Opção invalida! Voltando ao menu principal ...\n");
@@ -417,10 +437,8 @@ int main() {
           printf("Menu lucros e despesas\n");
           printf("Buscando informações...\n");
           //chamar funcão que vai lidar em calcular todas as despesas e gastos e retornar o lucro
-          printf("O que deseja fazer agora? [0 - Voltar ao menu principal | 1 - Recarregar lucros e despesas | 2 - Finalizar programa]\n");
-          scanf("%d", &oqueFazerAposIsso);
-          getchar();
 
+          int oqueFazerAposIsso = oqueFazerAposExecucao();
           if(oqueFazerAposIsso == 0){
 
             continuarMenuLucrosEDespesas = false;
@@ -430,8 +448,9 @@ int main() {
             continuarMenuLucrosEDespesas = true;
 
           } else if (oqueFazerAposIsso == 2) {
-            continuarMenuLucrosEDespesas = false;
-            continuarPrograma = false;
+              continuarMenuReceitas = false;
+              continuarMenuPrincipal = false;
+              continuarPrograma=false;
 
           } else {
             printf("Opção invalida! Voltando ao menu principal ...\n");
@@ -447,10 +466,7 @@ int main() {
           gerenciadorCategorias(categorias);
           printf("Fim da lista\n");
 
-          printf("O que deseja fazer agora? [0 - Voltar ao menu principal | 1 - Recarregar categorias | 2 - Finalizar programa]\n");
-          scanf("%d", &oqueFazerAposIsso);
-          getchar();
-
+          int oqueFazerAposIsso = oqueFazerAposExecucao();
           if(oqueFazerAposIsso == 0){
 
             continuarMenuListarCategoria = false;
@@ -460,8 +476,9 @@ int main() {
             continuarMenuListarCategoria = true;
 
           } else if (oqueFazerAposIsso == 2) {
-            continuarMenuListarCategoria = false;
-            continuarPrograma = false;
+              continuarMenuReceitas = false;
+              continuarMenuPrincipal = false;
+              continuarPrograma=false;
 
           } else {
             printf("Opção invalida! Voltando ao menu principal ...\n");
@@ -476,10 +493,7 @@ int main() {
           printf("Menu Dados Cadastrais\n");
           //chamar fucao que vai mostrar os dados da empresa;
           //no fluxo grama não pede para editar, so para mostrar 
-          printf("O que deseja fazer agora? [0 - Voltar ao menu principal | 1 - Recarregar dados cadastrais | 2 - Finalizar programa]\n");
-            scanf("%d", &oqueFazerAposIsso);
-            getchar();
-  
+          int oqueFazerAposIsso = oqueFazerAposExecucao();
             if(oqueFazerAposIsso == 0){
   
               continuarMenuDadosCadastrais = false;
@@ -489,10 +503,11 @@ int main() {
               continuarMenuDadosCadastrais = true;
   
             } else if (oqueFazerAposIsso == 2) {
-              continuarMenuDadosCadastrais = false;
-              continuarPrograma = false;
-  
-            } else {
+              continuarMenuReceitas = false;
+              continuarMenuPrincipal = false;
+              continuarPrograma=false;
+
+          } else {
               printf("Opção invalida! Voltando ao menu principal ...\n");
               continuarMenuListarCategoria = false;
             }
@@ -506,5 +521,7 @@ int main() {
     } while (continuarMenuPrincipal);
 
   } while (continuarPrograma);
+
+  printf("Programa finalizado!\n");
 
 }
