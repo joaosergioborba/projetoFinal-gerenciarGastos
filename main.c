@@ -112,6 +112,7 @@ int main() {
   bool continuarMenuListarCategoria = true;
   bool continuarMenuDadosCadastrais = true;
   bool continuarPrograma = true;
+  bool teste;
 
   //Variaveis fluxo do sistema
   int cadastrarMaisUmUsuario = 0;
