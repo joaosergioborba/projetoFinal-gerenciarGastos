@@ -39,6 +39,7 @@
 
 // Dados Produtos e serviços
   char produtosServicosDB[MAX_PRODUTOS][100];
+  int qtdProdutosServicos = 0;
   
 
 
@@ -254,24 +255,31 @@ char fornecedoresDB[MAX_FORNECEDORES][100];
 
 // Gerenciar produtos
 
-  void cadastrarProduto(char descricaoProdutoServico[100]){
-    char descricao = descricaoProdutoServico;
-    for(int i = 0; i< MAX_PRODUTOS; i++ ){
-      if(!produtosServicosDB[i]|| (strcmp(produtosServicosDB[i], '\0') == 0)){
-        produtosServicosDB[i][100] = descricao; 
-        printf("produto: %s\n", produtosServicosDB[i]);
-        break;
-      }
-      break;
-    }
+  void cadastrarProduto(){
+    char produto[100];
+    printf("Descrição do produto ou serviço: ");
+      
+    fgets(produtosServicosDB[qtdProdutosServicos], 100, stdin);
+    produtosServicosDB[qtdProdutosServicos][strcspn(produto, "\n")] = '\0';
+    printf("produto: %s\n", produtosServicosDB[qtdProdutosServicos]);
+    qtdProdutosServicos++;
+      
   }
 
-  void excluirProduto(char descricaoProdutoServico[100]){
+  void excluirProduto(int codigoProduto){
+
+    produtosServicosDB[codigoProduto][100] = '\0';
+
+    /*produtosServicosDB[codigoProduto][100] = '\0';
+    char produto[100];
+    fgets(produto, sizeof(produto), stdin);
+      produto[strcspn(produto, "\n")] = '\0';
     for(int i = 0; i<MAX_PRODUTOS; i++){
-      if(strcmp(descricaoProdutoServico, produtosServicosDB[i]) == 0){
+      if(strcmp(produto, produtosServicosDB[i]) == 0){
         produtosServicosDB[i][100] = '\0';
+        
       }
-    }
+      }*/
   }
 
   void listarProdutos(){
@@ -287,12 +295,12 @@ char fornecedoresDB[MAX_FORNECEDORES][100];
   void gerenciadorMenuProdutoEServicos(){
 
     int opcaoSelecionada;
-    char produto[100];
+    int produtoSelecionado;
 
     printf("O que deseja fazer agora?\n");
     printf("1 - Listar Produtos e serviços\n");
-    printf("2 - Cadastrar um novo fonecedor\n");
-    printf("3 - Excluir um fornecedor\n");
+    printf("2 - Cadastrar um novo produto/serviço\n");
+    printf("3 - Excluir um produto/Serviço\n");
     scanf("%d", &opcaoSelecionada);
     getchar();
 
@@ -302,15 +310,14 @@ char fornecedoresDB[MAX_FORNECEDORES][100];
       listarProdutos();
       break;
     case 2: 
-      printf("Descrição do produto ou serviço: ");
-      fgets(produto, sizeof(produto), stdin);
-      produto[strcspn(produto, "\n")] = '\0';
-      cadastrarProduto(produto);
+      cadastrarProduto();
       break;
     case 3:
-      fgets(produto, sizeof(produto), stdin);
-      produto[strcspn(produto, "\n")] = '\0';
-      excluirProduto(produto);
+      printf("Selecione o produto que deseja excluir\n");
+      listarProdutos();
+      scanf("%d", &produtoSelecionado);
+      getchar();
+      excluirProduto(produtoSelecionado);
       break;
     
     default:
@@ -625,14 +632,14 @@ char fornecedoresDB[MAX_FORNECEDORES][100];
           int oqueFazerAposIsso = oqueFazerAposExecucao();
           if(oqueFazerAposIsso == 0){
 
-            continuarMenuLucrosEDespesas = false;
+            continuarMenuProdutosServicos = false;
 
           } else if(oqueFazerAposIsso == 1){
 
-            continuarMenuLucrosEDespesas = true;
+            continuarMenuProdutosServicos = true;
 
           } else if (oqueFazerAposIsso == 2) {
-              continuarMenuReceitas = false;
+              continuarMenuProdutosServicos = false;
               continuarMenuPrincipal = false;
               continuarPrograma=false;
 
@@ -641,7 +648,7 @@ char fornecedoresDB[MAX_FORNECEDORES][100];
             continuarMenuLucrosEDespesas = false;
           }
 
-        } while(continuarMenuLucrosEDespesas);
+        } while(continuarMenuProdutosServicos);
         break;
         case 9:
         do{
