@@ -632,20 +632,20 @@ void listar_fornecedoresDB(){
           int oqueFazerAposIsso = oqueFazerAposExecucao();
           if(oqueFazerAposIsso == 0){
 
-            continuarMenuReceitas = false;
+            continuarMenuHistorico = false;
 
           } else if(oqueFazerAposIsso == 1){
 
-            continuarMenuReceitas = true;
+            continuarMenuHistorico = true;
 
           } else if (oqueFazerAposIsso == 2) {
-              continuarMenuReceitas = false;
+              continuarMenuHistorico = false;
               continuarMenuPrincipal = false;
               continuarPrograma=false;
 
           } else {
             printf("Opção invalida! Voltando ao menu principal ...\n");
-            continuarMenuReceitas = false;
+            continuarMenuHistorico = false;
           }
 
         } while (continuarMenuHistorico);
@@ -715,6 +715,24 @@ void listar_fornecedoresDB(){
           sleep(1);
           //chamar funcao que vai calcular a receita, as despesas, o lucro.
           calcularLucro();
+          int oqueFazerAposIsso = oqueFazerAposExecucao();
+          if(oqueFazerAposIsso == 0){
+
+            continuarMenuLucrosEDespesas = false;
+
+          } else if(oqueFazerAposIsso == 1){
+
+            continuarMenuLucrosEDespesas = true;
+
+          } else if (oqueFazerAposIsso == 2) {
+              continuarMenuLucrosEDespesas = false;
+              continuarMenuPrincipal = false;
+              continuarPrograma=false;
+
+          } else {
+            printf("Opção invalida! Voltando ao menu principal ...\n");
+            continuarMenuLucrosEDespesas = false;
+          }
         } while (continuarMenuLucrosEDespesas);
         break;
         case 6:
