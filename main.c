@@ -77,6 +77,21 @@ char fornecedoresDB[MAX_FORNECEDORES][100];
     }
 }
 
+  /*void listarTransacoes(char descR[][100], float valR[], float qtdR[], char fornR[][100], int catR[], int qtdReceitas,char descD[][100], float valD[], float qtdD[], char fornD[][100], int catD[], int qtdDespesas,char categorias[][40]) {
+
+    printf("\n=== HISTÓRICO DE RECEITAS (%d) ===\n", qtdReceitas);
+    for (int i = 0; i < qtdReceitas; i++) {
+        printf("%2d) %s | Valor: R$ %.2f | Qtd: %.2f | Fornecedor: %s | Categoria: %s\n",
+              i + 1, descR[i], valR[i], qtdR[i], fornR[i], categorias[catR[i]-1]);
+    }
+
+    printf("\n=== HISTÓRICO DE DESPESAS (%d) ===\n", qtdDespesas);
+    for (int i = 0; i < qtdDespesas; i++) {
+        printf("%2d) %s | Valor: R$ %.2f | Qtd: %.2f | Fornecedor: %s | Categoria: %s\n",
+              i + 1, descD[i], valD[i], qtdD[i], fornD[i], categorias[catD[i]-1]);
+    }
+  }*/
+
   int oqueFazerAposExecucao() {
   int opcaoSelecionada;
   printf("O que deseja fazer agora? [0 - Voltar ao menu principal | 1 - Recarregar menu atual | 2 - Finalizar programa]\n");
@@ -151,6 +166,7 @@ char fornecedoresDB[MAX_FORNECEDORES][100];
 
 }
 
+char listarProdutos();
 //Gerenciar financas 
 
   void cadastrarNovaDespesa() {
@@ -348,6 +364,120 @@ char fornecedoresDB[MAX_FORNECEDORES][100];
     listarProdutos();
   }
 
+//Gerenciar fronecedores
+
+void listar_fornecedoresDB(){
+
+    printf("Fornecedores Cadastrados:\n");
+    int fornecedor_encontrados = 0;
+    for(int i = 0; i < MAX_FORNECEDORES; i++) {
+        if(strlen(fornecedoresDB[i]) > 0 ) {
+
+            printf("%d - %s\n", i+1,fornecedoresDB[i]);
+            fornecedor_encontrados++;
+
+
+        }
+
+
+    }
+
+    if (fornecedor_encontrados == 0){
+
+        printf("nenhum fornecedor cadastrado :(\n");
+
+    }
+    
+
+
+ }
+
+ void cadastrar_fornecedorDB(){
+
+    char nome_fornecedor[50];
+
+    printf("Insira o nome do fornecedor: ");
+    fgets(nome_fornecedor,50, stdin);
+    nome_fornecedor[strcspn(nome_fornecedor, "\n")] = '\n';
+
+    for(int i = 0; i < MAX_FORNECEDORES; i++) {
+        if(strlen(fornecedoresDB[i]) == 0) {
+            strcpy(fornecedoresDB[i], nome_fornecedor);
+            printf("Fornecedor: %s cadastrado \n",nome_fornecedor);
+
+            return;
+        }
+
+    }
+
+    printf("Limites de fornecedores atingindo\n");
+
+ }
+
+ void excluir_fornecedoresDB(){
+    int indice;
+
+    listar_fornecedoresDB();
+    printf("qual fornecedor deseja excluir: ");
+    scanf("%d", &indice);
+    getchar();
+
+    if(indice < 1 || indice >MAX_FORNECEDORES) {
+        printf("Indice invalido\n");
+        return;
+
+    }
+
+    if(strlen(fornecedoresDB[indice-1]) == 0) {
+        printf("fornecedor nao encontrado\n");
+        return;
+    }
+
+    printf("excluindo fornecedor: %s\n", fornecedoresDB[indice-1]);
+    strcpy(fornecedoresDB[indice-1], "");
+    sleep (1000);
+    printf("fornecedor excluido\n");
+
+ }
+
+ void gerenciador_menu_fornecedoresDB(){
+
+    int opcaoSelecionadaMenuFornecedores;
+
+    printf("Menu Fornecedores\n");
+    printf("O que deseja fazer agora?\n");
+    printf("1 - Listar forncederes\n");
+    printf("2 - Cadastrar um novo fonecedor\n");
+    printf("3 - Excluir um fornecedor\n");
+    scanf("%d", &opcaoSelecionadaMenuFornecedores);
+    getchar();
+
+    switch(opcaoSelecionadaMenuFornecedores) {
+        case 1:
+            listar_fornecedoresDB();
+            break;
+            
+        case 2:
+            cadastrar_fornecedorDB();
+            break;
+            
+        case 3:
+            excluir_fornecedoresDB();
+            break;
+            
+        case 0:
+            printf("Voltando ao menu principal\n");
+            break;
+            
+        default:
+        printf("opcao invalida");
+        break;
+
+    }
+
+
+ }
+
 //programa
 
   int main() {
@@ -496,7 +626,8 @@ char fornecedoresDB[MAX_FORNECEDORES][100];
           sleep(1);
           printf("Gerando Relatório\n");
           // chamar funcao que lista as transaçõoes
-          listarTransacoes(descricoesReceitasDB, valoresReceitasDB, qtdReceitas, descricoesDespesasDB, valoresDespesasDB, qtdDespesas);
+           listarTransacoes(descricoesReceitasDB, valoresReceitasDB, qtdReceitas, descricoesDespesasDB, valoresDespesasDB, qtdDespesas);
+          
 
           int oqueFazerAposIsso = oqueFazerAposExecucao();
           if(oqueFazerAposIsso == 0){
@@ -591,11 +722,11 @@ char fornecedoresDB[MAX_FORNECEDORES][100];
           printf("Menu de comparação de preços\n");
           printf("Qual produto/ serviço deseja comparar agora?\n");
           listarProdutos();
-          scanf("%d", produtoOuServicoMenuComparativo);
+          scanf("%d", &produtoOuServicoMenuComparativo);
           getchar();
           printf("Buscando dados...\b");
           //chamar função que vai comparar 
-          comparador(produtoOuServicoMenuComparativo);
+          comparador();
 
           int oqueFazerAposIsso = oqueFazerAposExecucao();
 
@@ -621,13 +752,14 @@ char fornecedoresDB[MAX_FORNECEDORES][100];
         break;
         case 7:
         do {
-          printf("Menu Fornecedores\n");
+          gerenciador_menu_fornecedoresDB();
+          /*printf("Menu Fornecedores\n");
           printf("O que deseja fazer agora?\n");
           printf("1 - Listar forncederes\n");
           printf("2 - Cadastrar um novo fonecedor\n");
           printf("3 - Excluir um fornecedor\n");
           scanf("%d", &opcaoSelecionadaMenuFornecedores);
-          getchar();
+          getchar();*/
           //chamar funcao com que vai lidar com isso, aqui da pra fazer um swith direto dentro da funcao, pq ai a propria funcao vai lidar com oq fazer em cada uma das opções selecionadas e retornar o que precisa. (podem fazer de outra forma também)
           
           int oqueFazerAposIsso = oqueFazerAposExecucao();
