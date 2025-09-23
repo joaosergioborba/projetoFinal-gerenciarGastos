@@ -12,6 +12,13 @@
 
 //Banco de dados
 
+//Empresa
+
+  char nomeEmpresa[100] = "Lorenzete";
+  char cnpjEmpresa[100] = "07900938000107";
+  char enderecoEmpresa[100] = "Av cuiaba, 200, cuiaba - mt";
+  float saldo = 0;
+
 //Usuarios
   char usuarios[5][100];
   char senhas[5][100];
@@ -38,8 +45,8 @@
   int qtdReceitas = 0;
 
 // Dados Produtos e serviços
-  char produtosServicosDB[MAX_PRODUTOS][100];
-  int qtdProdutosServicos = 0;
+  char produtosServicosDB[MAX_PRODUTOS][100] = {"produto 1", "produto 2", "produto 3"};
+  int qtdProdutosServicos = 2;
   
 
 
@@ -97,6 +104,12 @@ char fornecedoresDB[MAX_FORNECEDORES][100];
       return opcaoSelecionada;
 }
 
+  void dadosCadastraisEmpresa(){
+    printf("Nome Empresa: %s\n", nomeEmpresa);
+    printf("Endereço Empresa: %s\n", enderecoEmpresa);
+    printf("CNPJ Empresa: %s\n", cnpjEmpresa);
+    
+  }
 
 //Gerenciar usuario 
 
@@ -161,6 +174,7 @@ char fornecedoresDB[MAX_FORNECEDORES][100];
   getchar();
 
   printf("Produto ou serviço: ");
+  listarProdutos();
   fgets(descricoesDespesasDB[qtdDespesas], 100, stdin);
   descricoesDespesasDB[qtdDespesas][strcspn(descricoesDespesasDB[qtdDespesas], "\n")] = '\0';
 
@@ -228,7 +242,7 @@ char fornecedoresDB[MAX_FORNECEDORES][100];
 }
 
   float consultarSaldo(float receitas[], int qtdR, float despesas[], int qtdD) {
-    float saldo = 0.0f;
+    //float saldo = 0.0f;
     for (int i = 0; i < qtdR; i++) saldo += receitas[i];
     for (int i = 0; i < qtdD; i++) saldo -= despesas[i];
     return saldo;
@@ -255,12 +269,12 @@ char fornecedoresDB[MAX_FORNECEDORES][100];
 
 // Gerenciar produtos
 
-  void cadastrarProduto(){
+  char cadastrarProduto(){
     char produto[100];
     printf("Descrição do produto ou serviço: ");
       
     fgets(produtosServicosDB[qtdProdutosServicos], 100, stdin);
-    produtosServicosDB[qtdProdutosServicos][strcspn(produto, "\n")] = '\0';
+    produtosServicosDB[qtdProdutosServicos][strcspn(produtosServicosDB[qtdProdutosServicos], "\n")] = '\0';
     printf("produto: %s\n", produtosServicosDB[qtdProdutosServicos]);
     qtdProdutosServicos++;
       
@@ -268,7 +282,8 @@ char fornecedoresDB[MAX_FORNECEDORES][100];
 
   void excluirProduto(int codigoProduto){
 
-    produtosServicosDB[codigoProduto][100] = '\0';
+    printf("Produto %s excluido!\n", produtosServicosDB[codigoProduto]);
+    produtosServicosDB[codigoProduto][0] = '\0';
 
     /*produtosServicosDB[codigoProduto][100] = '\0';
     char produto[100];
@@ -279,16 +294,19 @@ char fornecedoresDB[MAX_FORNECEDORES][100];
         produtosServicosDB[i][100] = '\0';
         
       }
-      }*/
+      }*/ //nao funcionou :( 
   }
 
-  void listarProdutos(){
+  char listarProdutos(){
     printf("Produtos cadastrados\n");
-    for(int i = 0; i<MAX_PRODUTOS; i++){
-      if(strcmp(produtosServicosDB[i], '\0') != 0 && produtosServicosDB[i]){
-        printf("%d - %s\n", i+1, produtosServicosDB[i]);
-      }
+    for(int i = 0; i<qtdProdutosServicos; i++){
+      //char produtoAtual = produtosServicosDB[i];
+      printf("%d - %s \n", i+1, produtosServicosDB[i]);
+      /*if(strcmp(produtosServicosDB[i], '\0') != 0){
+      }*/
     }
+
+    printf("Fim da lista\n");
 
   }
 
@@ -317,7 +335,7 @@ char fornecedoresDB[MAX_FORNECEDORES][100];
       listarProdutos();
       scanf("%d", &produtoSelecionado);
       getchar();
-      excluirProduto(produtoSelecionado);
+      excluirProduto(produtoSelecionado-1);
       break;
     
     default:
@@ -326,6 +344,9 @@ char fornecedoresDB[MAX_FORNECEDORES][100];
 
   }
 
+  void comparador(){
+    listarProdutos();
+  }
 
 //programa
 
@@ -333,8 +354,10 @@ char fornecedoresDB[MAX_FORNECEDORES][100];
   //Banco de dados local
   
   //Variaveis estados do sistema
+  
   bool cadastroEfeituado = false;
   bool usuarioLogado = false;
+  bool dadosIniciaisPreenchido = false;
   bool continuarMenuPrincipal = true;
   bool continuarMenuSaldo = true;
   bool continuarMenuHistorico = true;
@@ -347,7 +370,7 @@ char fornecedoresDB[MAX_FORNECEDORES][100];
   bool continuarMenuListarCategoria = true;
   bool continuarMenuDadosCadastrais = true;
   bool continuarPrograma = true;
- 
+  
 
   //Variaveis fluxo do sistema
   int cadastrarMaisUmUsuario = 0;
@@ -364,7 +387,7 @@ char fornecedoresDB[MAX_FORNECEDORES][100];
   //Variaveis menu cadastrar receitas
   
   //Variaveis menu Comparativo
-  char produtoOuServicoMenuComparativo[100];
+  int produtoOuServicoMenuComparativo;
 
   //Variaveis menu fornecedor
   int opcaoSelecionadaMenuFornecedores;
@@ -423,7 +446,16 @@ char fornecedoresDB[MAX_FORNECEDORES][100];
 
     }
 
+    while(!dadosIniciaisPreenchido){
+      printf("Nome da empresa: \n");
+      fgets(nomeEmpresa, sizeof(nomeEmpresa), stdin);
+      nomeEmpresa[strcspn(nomeEmpresa, "\n")] = '\0';
+      printf("Saldo Inicial: \n");
+      scanf("%f", &saldo);
+      getchar();
+      dadosIniciaisPreenchido = true;
 
+    }
     do {
 
       printf("Bem vindo ao gerênciador de despesas e receitas\n");
@@ -491,7 +523,7 @@ char fornecedoresDB[MAX_FORNECEDORES][100];
         case 3: 
 
         do {
-  
+          printf("Menu despesa\n");
           cadastrarNovaDespesa();
           int oqueFazerAposIsso = oqueFazerAposExecucao();
           if(oqueFazerAposIsso == 0){
@@ -520,7 +552,7 @@ char fornecedoresDB[MAX_FORNECEDORES][100];
         case 4:
 
         do {
-
+          printf("Menu receita\n");
           cadastrarNovaReceita();
 
           int oqueFazerAposIsso = oqueFazerAposExecucao();
@@ -544,7 +576,6 @@ char fornecedoresDB[MAX_FORNECEDORES][100];
 
         } while (continuarMenuReceitas);
 
-      
         break;
         case 5:
         do {
@@ -555,14 +586,16 @@ char fornecedoresDB[MAX_FORNECEDORES][100];
           calcularLucro();
         } while (continuarMenuLucrosEDespesas);
         break;
+        case 6:
         do {
-          case 6:
           printf("Menu de comparação de preços\n");
           printf("Qual produto/ serviço deseja comparar agora?\n");
-          fgets(produtoOuServicoMenuComparativo, sizeof(produtoOuServicoMenuComparativo), stdin);
-          produtoOuServicoMenuComparativo[strcspn(produtoOuServicoMenuComparativo, "\n")] = '\0';
+          listarProdutos();
+          scanf("%d", produtoOuServicoMenuComparativo);
+          getchar();
           printf("Buscando dados...\b");
           //chamar função que vai comparar 
+          comparador(produtoOuServicoMenuComparativo);
 
           int oqueFazerAposIsso = oqueFazerAposExecucao();
 
@@ -585,12 +618,9 @@ char fornecedoresDB[MAX_FORNECEDORES][100];
           }
 
         } while(continuarMenuComparativo);
-    
-
         break;
         case 7:
         do {
-          
           printf("Menu Fornecedores\n");
           printf("O que deseja fazer agora?\n");
           printf("1 - Listar forncederes\n");
@@ -680,8 +710,8 @@ char fornecedoresDB[MAX_FORNECEDORES][100];
         break;
         case 10:
         do {
-
           printf("Menu Dados Cadastrais\n");
+          dadosCadastraisEmpresa();
           //chamar fucao que vai mostrar os dados da empresa;
           //no fluxo grama não pede para editar, so para mostrar 
           int oqueFazerAposIsso = oqueFazerAposExecucao();
@@ -704,9 +734,6 @@ char fornecedoresDB[MAX_FORNECEDORES][100];
             }
         } while (continuarMenuDadosCadastrais);
         break;
-        
-        
-
       }
 
     } while (continuarMenuPrincipal);
